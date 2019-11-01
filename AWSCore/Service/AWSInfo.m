@@ -80,8 +80,14 @@ static NSDictionary<NSString *, id> * _userConfig = nil;
 
 - (instancetype)init {
     NSDictionary<NSString *, id> *config;
-    NSString *pathToAWSConfigJson = [[NSBundle mainBundle] pathForResource:@"awsconfiguration"
-                                                                    ofType:@"json"];
+    NSURL *pathToDocumentsFolder = [NSFileManager.defaultManager URLForDirectory: NSDocumentDirectory
+                                                                         inDomain: NSUserDomainMask
+                                                                appropriateForURL: nil
+                                                                           create: NO
+                                                                            error: nil];
+    
+    NSString *pathToAWSConfigJson = [pathToDocumentsFolder URLByAppendingPathComponent: @"awsconfiguration.json"].path;
+    
     if (pathToAWSConfigJson) {
         NSData *data = [NSData dataWithContentsOfFile:pathToAWSConfigJson];
         if (!data) {
